@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحليل الحوار الفكري</title>
+
+<!-- IBM Plex Arabic -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* Enforce IBM Plex Arabic */
+html, body, * {
+    font-family: 'IBM Plex Arabic', Arial, sans-serif !important;
+}
+
+:root {
+    --bg-color: #fbfbfd;
+    --text-main: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --shadow-soft: 0 6px 20px rgba(0,0,0,0.025);
+    --shadow-hover: 0 16px 50px rgba(0,0,0,0.06);
+    --transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+
+/* Body */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.8;
+    padding: 80px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+header {
+    max-width: 900px;
+    text-align: center;
+    margin-bottom: 80px;
+    animation: fadeIn 1s ease-out;
+}
+
+header h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    margin-bottom: 18px;
+    color: #000;
+}
+
+header p {
+    color: var(--text-secondary);
+    font-size: 1.45rem;
+    font-weight: 200;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* Container */
+.container {
+    max-width: 850px;
+    width: 100%;
+}
+
+/* Threaded Messages */
+.message-node {
+    position: relative;
+    margin-bottom: 20px; /* Smaller gap between nodes */
+}
+
+.reply-level-1 { margin-right: 40px; }
+.reply-level-2 { margin-right: 80px; }
+
+.bubble {
+    padding: 28px 32px;
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+/* Speaker color differentiation */
+.message-node:first-child .bubble { background: #f5f5f7; } /* Non-Muslim */
+.message-node.reply-level-1 .bubble { background: #ffffff; } /* Muslim reply */
+.message-node.reply-level-2 .bubble { background: #f9f9fb; } /* Optional deeper reply shade */
+
+.bubble:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Labels & Text */
+.label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.text-content {
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.75;
+}
+
+/* Smooth commentary panel */
+.commentary {
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease;
+    background: rgba(0,0,0,0.012);
+    border-radius: 0 0 24px 24px;
+    margin-top: 5px;
+    padding: 0 32px;
+}
+
+.message-node.active .commentary {
+    transform: scaleY(1);
+    opacity: 1;
+    padding: 30px 32px 32px 32px;
+    margin-top: 5px;
+}
+
+.advice-header {
+    color: #000;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.advice-text {
+    color: var(--text-secondary);
+    font-size: 1.15rem;
+    font-weight: 200;
+    line-height: 1.85;
+}
+
+/* Arrows */
+.arrow-icon {
+    position: absolute;
+    left: 28px;
+    top: 35px;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: #d2d2d7;
+    stroke-width: 1.5;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), stroke 0.3s ease;
+}
+
+.message-node.active .arrow-icon {
+    transform: rotate(180deg);
+    stroke: #000;
+}
+
+/* Connectors */
+.connector {
+    position: absolute;
+    right: -20px;
+    top: -25px;
+    width: 18px;
+    height: 40px;
+    border-right: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    border-bottom-right-radius: 12px;
+}
+
+/* Final Panel */
+.final-panel {
+    margin-top: 100px;
+    padding: 70px 40px;
+    background: #000;
+    color: #fff;
+    border-radius: 40px;
+    text-align: center;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.15);
+    animation: fadeIn 1.2s ease-out;
+}
+
+.final-panel h2 { 
+    font-weight: 700; 
+    margin-bottom: 25px; 
+    font-size: 2.5rem; 
+    letter-spacing: -0.03em;
+}
+
+.final-panel p { 
+    color: #86868b; 
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    max-width: 550px; 
+    margin: 0 auto; 
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Footer */
+footer {
+    margin-top: 80px;
+    color: #d2d2d7;
+    font-size: 0.9rem;
+    font-weight: 200;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    header h1 { font-size: 2.5rem; }
+    header p { font-size: 1.2rem; }
+    .bubble { padding: 24px 28px; }
+    .reply-level-1, .reply-level-2 { margin-right: 20px; }
+    .commentary { padding: 0 28px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>تحليل الحوار</h1>
+    <p>نظرة متأملة في أسلوب النقاش لتعزيز الحكمة في الرد</p>
+</header>
+
+<div class="container">
+    
+    <div class="message-node" onclick="toggleNode(this)">
+        <div class="bubble">
+            <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="label">الطرف الأول (غير مسلم)</span>
+            <p class="text-content">"هنا يوضع النص الأصلي للتعليق الأول بكل تفاصيله."</p>
+        </div>
+        <div class="commentary">
+            <span class="advice-header">تحليل الطرح من وجهة نظر موضوعية:</span>
+            <p class="advice-text">هنا نستخدم وزن الخط الخفيف لشرح السياق الفكري بعيداً عن التحيز، مما يسهل استيعاب الطرف الآخر.</p>
+        </div>
+    </div>
+
+    <div class="message-node reply-level-1" onclick="toggleNode(this)">
+        <div class="connector"></div>
+        <div class="bubble">
+            <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="label">الطرف الثاني (المسلم)</span>
+            <p class="text-content">"هنا يوضع الرد الذي تفاعل به الشخص المسلم مع الكلام أعلاه."</p>
+        </div>
+        <div class="commentary">
+            <span class="advice-header">لماذا لم يكن هذا الرد مثالياً؟</span>
+            <p class="advice-text">نقد بناء يوضح مواضع الخلل في الرد بأسلوب هادئ وراقي.</p>
+        </div>
+    </div>
+
+    <div class="message-node reply-level-2" onclick="toggleNode(this)">
+        <div class="connector"></div>
+        <div class="bubble">
+            <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="label">نقطة الخلاف الجوهرية</span>
+            <p class="text-content">"هنا تلخيص لآخر نقطة وصل إليها الجدال."</p>
+        </div>
+        <div class="commentary">
+            <span class="advice-header">التوجيه المقترح للمستقبل:</span>
+            <p class="advice-text">اقتراح بديل للرد: "لو قيل (كذا) بدلاً من (كذا) لكان الوقع أطيب والنتيجة أعمق."</p>
+        </div>
+    </div>
+
+    <div class="final-panel">
+        <h2>خلاصة المراجعة</h2>
+        <p>إن الهدف من مراجعة هذا الحوار هو الارتقاء بالكلمة، فالمسلم كالغيث حيثما وقع نفع، والكلمة الطيبة صدقة.</p>
+    </div>
+
+</div>
+
+<footer>
+    تصميم مخصص لغرض المراجعة الفكرية &copy; 2026
+</footer>
+
+<script>
+function toggleNode(el) {
+    document.querySelectorAll('.message-node').forEach(node => {
+        if(node !== el) node.classList.remove('active');
+    });
+    el.classList.toggle('active');
+}
+</script>
+
+</body>
+</html>
