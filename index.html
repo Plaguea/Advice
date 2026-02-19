@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* Global font */
+/* Global font & reset */
 html, body, * { font-family: 'IBM Plex Sans Arabic', Arial, sans-serif !important; margin:0; padding:0; box-sizing:border-box; }
 
 /* Variables */
@@ -25,9 +25,10 @@ html, body, * { font-family: 'IBM Plex Sans Arabic', Arial, sans-serif !importan
   --shadow-soft: 0 12px 30px rgba(0,0,0,0.08);
   --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
   --transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+  --link-color: #0071e3; /* theme-matching link color */
 }
 
-/* Dark Mode */
+/* Dark Mode Variables */
 :root.dark {
   --bg-color: #121212;
   --text-main: #eee;
@@ -37,14 +38,16 @@ html, body, * { font-family: 'IBM Plex Sans Arabic', Arial, sans-serif !importan
   --bubble-reply2: #2a2a2a;
   --shadow-soft: 0 12px 30px rgba(0,0,0,0.3);
   --shadow-hover: 0 20px 60px rgba(0,0,0,0.5);
+  --link-color: #66aaff;
 }
 
 /* Body */
 body { background: var(--bg-color); color: var(--text-main); line-height:1.8; padding:80px 20px; display:flex; flex-direction:column; align-items:center; transition:0.4s; }
 
-/* Toggle dark mode */
+/* Dark Mode Toggle */
 #dark-toggle { position:absolute; top:20px; left:20px; border:none; background:#000; color:#fff; padding:8px 14px; border-radius:12px; font-weight:600; cursor:pointer; opacity:0.85; transition:0.3s; }
 #dark-toggle:hover { opacity:1; }
+:root.dark #dark-toggle { background:#eee; color:#121212; }
 
 /* Header */
 header { max-width:900px; text-align:center; margin-bottom:50px; }
@@ -78,12 +81,12 @@ header p { font-weight:300; font-size:1.3rem; color:var(--text-secondary); max-w
 
 /* Sources */
 .source-icon { position:absolute; bottom:8px; left:28px; font-size:0.9rem; cursor:pointer; color:var(--text-secondary); transition:color 0.3s; }
-.source-icon:hover { color:#007aff; }
+.source-icon:hover { color:var(--link-color); }
 .sources-popup { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--bg-color); color:var(--text-main); border-radius:24px; padding:30px 40px; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-width:90%; max-height:80%; overflow-y:auto; z-index:1000; }
 .sources-popup h3 { font-weight:600; margin-bottom:16px; }
-.sources-popup a { display:block; margin-bottom:8px; color:#007aff; text-decoration:none; }
+.sources-popup a { display:block; margin-bottom:8px; color:var(--link-color); text-decoration:none; }
 .sources-popup a:hover { text-decoration:underline; }
-.sources-popup button { margin-top:15px; padding:6px 12px; border:none; border-radius:10px; cursor:pointer; background:#007aff; color:#fff; }
+.sources-popup button { margin-top:15px; padding:6px 12px; border:none; border-radius:10px; cursor:pointer; background:var(--link-color); color:#fff; }
 
 /* Arrow Icon */
 .arrow-icon { position:absolute; left:28px; top:28px; width:20px; height:20px; fill:none; stroke:#d2d2d7; stroke-width:1.5; transition:transform 0.4s,stroke 0.3s; }
@@ -107,7 +110,6 @@ header p { font-weight:300; font-size:1.3rem; color:var(--text-secondary); max-w
 
 /* Animations */
 @keyframes fadeIn{ from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
-
 </style>
 </head>
 <body>
@@ -209,6 +211,7 @@ function showSources(el){
     urls.forEach(url=>{
       const a=document.createElement('a');
       a.href=url.trim(); a.target='_blank'; a.textContent=url.trim();
+      a.style.color = getComputedStyle(document.documentElement).getPropertyValue('--link-color'); // match theme
       list.appendChild(a);
     });
   } else {
