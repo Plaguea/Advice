@@ -72,9 +72,7 @@ max-width:850px;
 width:100%;
 }
 
-.message-node{
-margin-bottom:18px;
-}
+.message-node{margin-bottom:18px;}
 
 .bubble{
 background:var(--bubble);
@@ -104,9 +102,7 @@ border-radius:16px;
 background:rgba(255,255,255,.05);
 }
 
-.message-node.active .commentary{
-display:block;
-}
+.message-node.active .commentary{display:block;}
 
 .source-icon{
 display:inline-block;
@@ -116,9 +112,7 @@ color:var(--sub);
 cursor:pointer;
 }
 
-.source-icon:hover{
-color:var(--link);
-}
+.source-icon:hover{color:var(--link);}
 
 .faq-node{
 margin-top:25px;
@@ -135,9 +129,7 @@ margin-top:10px;
 color:var(--sub);
 }
 
-.faq-node.active .faq-content{
-display:block;
-}
+.faq-node.active .faq-content{display:block;}
 
 #admin-panel{
 display:none;
@@ -214,7 +206,7 @@ text-decoration:none;
 <hr style="margin:20px 0">
 
 <input id="faq-q" placeholder="سؤال FAQ">
-<textarea id="faq-a" placeholder="إجابة FAQ (بالقرآن فقط)"></textarea>
+<textarea id="faq-a" placeholder="إجابة FAQ"></textarea>
 <button onclick="addFAQ()">إضافة FAQ</button>
 </div>
 
@@ -231,13 +223,12 @@ text-decoration:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged }
 from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs }
 from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-/* ===== YOUR REAL CONFIG ===== */
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRkIxb8WPAXqbgb296HNke9QOqCwcB8Kg",
@@ -250,13 +241,12 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 const ADMIN_EMAIL = "tmtmcpe@gmail.com";
 
-/* ===== Hidden Admin Login ===== */
+/* Hidden Admin Login */
 
 const params = new URLSearchParams(window.location.search);
 if (params.get("admin") === "moon") {
@@ -272,38 +262,38 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-/* ===== Add Comment ===== */
+/* Add Message */
 
 window.addMessage = async function() {
   const user = auth.currentUser;
   if (!user || user.email !== ADMIN_EMAIL) return;
 
   await addDoc(collection(db,"messages"),{
-    text: admin-text.value,
-    side: admin-side.value,
-    gender: admin-gender.value,
-    sources: admin-sources.value.split(","),
+    text: document.getElementById("admin-text").value,
+    side: document.getElementById("admin-side").value,
+    gender: document.getElementById("admin-gender").value,
+    sources: document.getElementById("admin-sources").value.split(","),
     created: Date.now()
   });
 
   location.reload();
 };
 
-/* ===== Add FAQ ===== */
+/* Add FAQ */
 
 window.addFAQ = async function(){
   const user = auth.currentUser;
   if (!user || user.email !== ADMIN_EMAIL) return;
 
   await addDoc(collection(db,"faq"),{
-    q: faq-q.value,
-    a: faq-a.value
+    q: document.getElementById("faq-q").value,
+    a: document.getElementById("faq-a").value
   });
 
   location.reload();
 };
 
-/* ===== Load Content ===== */
+/* UI */
 
 function toggleNode(el){ el.classList.toggle("active"); }
 function toggleFAQ(el){ el.classList.toggle("active"); }
@@ -362,10 +352,10 @@ async function load(){
 }
 load();
 
-/* ===== Dark Mode ===== */
+/* Dark Mode Fix */
 
-dark-toggle.onclick=()=>{
- document.documentElement.classList.toggle("dark");
+document.getElementById("dark-toggle").onclick = () => {
+  document.documentElement.classList.toggle("dark");
 };
 </script>
 
